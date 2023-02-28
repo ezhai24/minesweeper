@@ -6,13 +6,13 @@
     "plugin:react/jsx-runtime",
     "plugin:react-hooks/recommended",
     "plugin:import/recommended",
-    "plugin:@typescript-eslint/recommended"
+    "plugin:@typescript-eslint/recommended",
+    "prettier"
   ],
   "parser": "@typescript-eslint/parser",
   "plugins": ["@typescript-eslint"],
   "rules": {
     "arrow-body-style": ["error", "as-needed"],
-    "eol-last": 1,
     "import/order": [
       "error",
       {
@@ -32,19 +32,16 @@
         }
       }
     ],
-    "indent": ["error", 2],
     "max-len": ["error", { "comments": 80 }],
     "no-console": ["error"],
-    "no-multi-spaces": ["error"],
-    "no-multiple-empty-lines": [
+    "quotes": [
       "error",
+      "single",
       {
-        "max": 1,
-        "maxBOF": 0
+        "avoidEscape": true,
+        "allowTemplateLiterals": false
       }
-    ],
-    "semi": ["error", "always"],
-    "quotes": ["error", "single"]
+    ]
   },
   "settings": {
     "react": {

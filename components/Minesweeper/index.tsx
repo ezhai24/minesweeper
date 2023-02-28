@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { useState } from 'react';
+import { MouseEvent, useState } from 'react';
 
 import { FieldSize, generateMinefield, PlotState } from './utils';
 
@@ -23,18 +23,74 @@ const Minesweeper = () => {
       fieldSize.numMines
     )
   );
-  const [plotStates] = useState(
+  const [plotStates, setPlotStates] = useState(
     Array.from({ length: fieldSize.numRows }, () =>
       Array.from({ length: fieldSize.numColumns }, () => PlotState.DEFAULT)
     )
   );
+
+  const sweepAdjacentPlots = (
+    currentPlotStates: PlotState[][],
+    row: number,
+    column: number
+  ) => {
+    // At least one adjacent plot has a mine. Stop sweeping to avoid detonation.
+    if (minefield[row][column] !== 0) {
+      return;
+    }
+
+    // Iterate over all plots adjacent to the current plot
+    for (let i = -1; i <= 1; i++) {
+      for (let j = -1; j <= 1; j++) {
+        if (
+          // Skipping any plots that are outside the bounds of the minefield
+          row + i >= 0 &&
+          row + i < fieldSize.numRows &&
+          column + j >= 0 &&
+          column + j < fieldSize.numColumns &&
+          // Skipping any plots that have already been swept
+          currentPlotStates[row + i][column + j] !== PlotState.SWEPT
+        ) {
+          // Mark these plots as swept and sweep the plots adjacent to them
+          currentPlotStates[row + i][column + j] = PlotState.SWEPT;
+          sweepAdjacentPlots(currentPlotStates, row + i, column + j);
+        }
+      }
+    }
+  };
+
+  const sweepPlot = (
+    e: MouseEvent<HTMLSpanElement>,
+    row: number,
+    column: number
+  ) => {
+    // The convention for Minesweeper is to hold off on sweeping a plot until
+    // the user has released the mouse button (onMouseUp). React v16+ does not
+    // differentiate between left/right clicks for this event handler so we do a
+    // manual check here. Return on right click since it should flag the plot
+    // rather than sweep it.
+    const isRightClick = e.nativeEvent.button === 2;
+    if (isRightClick) {
+      return;
+    }
+
+    // Sweep the current plot. For ergonomics, recurse adjacent plots and sweep
+    // any 3x3 sections that do not have any mines in the entire section.
+    const newPlotStates = plotStates.map((row) => row.slice());
+    newPlotStates[row][column] = PlotState.SWEPT;
+    sweepAdjacentPlots(newPlotStates, row, column);
+    setPlotStates(newPlotStates);
+  };
 
   return (
     <>
       {minefield.map((row, rowIndex) => (
         <Row key={rowIndex}>
           {row.map((plotValue, columnIndex) => (
-            <Plot key={columnIndex}>
+            <Plot
+              key={columnIndex}
+              onMouseUp={(e) => sweepPlot(e, rowIndex, columnIndex)}
+            >
               {plotStates[rowIndex][columnIndex] === PlotState.SWEPT
                 ? plotValue
                 : ''}

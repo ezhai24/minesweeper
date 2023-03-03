@@ -33,7 +33,29 @@ const Minesweeper = () => {
   );
   const [isGameOver, setIsGameOver] = useState(false);
 
+  let unsweptPlots = 0;
+  plotStates.forEach((row) =>
+    row.forEach((plotState) => {
+      if (plotState !== PlotState.SWEPT) {
+        unsweptPlots++;
+      }
+    })
+  );
+
+  // The number of unswept plots exactly matches the number of mines in the
+  // field and the user has not ended the game by detonating any mines yet.
+  // The remaining unswept plots must all be mines and the user has won.
+  const isGameWon = unsweptPlots === fieldSize.numMines && !isGameOver;
+
   const getPlotDisplayValue = (plotState: PlotState, plotValue: number) => {
+    // If the user has won, mark all mines as flagged regardless of whether
+    // they've been flagged manually.
+    if (isGameWon) {
+      if (plotValue === -1) {
+        return '!';
+      }
+    }
+
     // If the user has lost the game, we want to specify the detonated mine then
     // reveal all other mines. For the rest of the plots without mines, we want
     // to indicate any that were incorrectly flagged. For all other plots,
@@ -146,7 +168,7 @@ const Minesweeper = () => {
     row: number,
     column: number
   ) => {
-    if (isGameOver) {
+    if (isGameWon || isGameOver) {
       return;
     }
 
@@ -161,6 +183,7 @@ const Minesweeper = () => {
 
   return (
     <>
+      {isGameWon && <p>You win!</p>}
       {minefield.map((row, rowIndex) => (
         <Row key={rowIndex}>
           {row.map((plotValue, columnIndex) => (

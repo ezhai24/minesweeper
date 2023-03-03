@@ -1,9 +1,21 @@
 import styled from '@emotion/styled';
-import { MouseEvent, useEffect, useState } from 'react';
+import { ChangeEvent, MouseEvent, useEffect, useState } from 'react';
 
 import { useStopwatch } from '@/hooks/useStopwatch';
 
-import { FieldSize, generateMinefield, PlotState } from './utils';
+import {
+  FieldSize,
+  FieldSizeConfig,
+  generateMinefield,
+  PlotState,
+} from './utils';
+
+type FieldSizeOption = { label: string; value: keyof typeof FieldSize };
+const fieldSizeOptions: FieldSizeOption[] = [
+  { label: 'Beginner', value: 'BEGINNER' },
+  { label: 'Intermediate', value: 'INTERMEDIATE' },
+  { label: 'Expert', value: 'EXPERT' },
+];
 
 const Row = styled.div({
   display: 'flex',
@@ -28,7 +40,7 @@ const Minesweeper = () => {
     resetStopwatch,
   } = useStopwatch();
 
-  const [fieldSize] = useState(FieldSize.BEGINNER);
+  const [fieldSize, setFieldSize] = useState(FieldSize.BEGINNER);
   const [minefield, setMinefield] = useState(
     generateMinefield(
       fieldSize.numRows,
@@ -67,6 +79,16 @@ const Minesweeper = () => {
       stopStopwatch();
     }
   }, [stopStopwatch, isGameWon, isGameOver]);
+
+  const changeFieldSize = (e: ChangeEvent<HTMLSelectElement>) => {
+    if (!(e.target.value in FieldSize)) {
+      return;
+    }
+
+    const newFieldSize = FieldSize[e.target.value as keyof typeof FieldSize];
+    setFieldSize(newFieldSize);
+    resetField(newFieldSize);
+  };
 
   const getPlotDisplayValue = (plotState: PlotState, plotValue: number) => {
     // If the user has won, mark all mines as flagged regardless of whether
@@ -206,17 +228,17 @@ const Minesweeper = () => {
     }
   };
 
-  const resetField = () => {
+  const resetField = (newFieldSize: FieldSizeConfig) => {
     setMinefield(
       generateMinefield(
-        fieldSize.numRows,
-        fieldSize.numColumns,
-        fieldSize.numMines
+        newFieldSize.numRows,
+        newFieldSize.numColumns,
+        newFieldSize.numMines
       )
     );
     setPlotStates(
-      Array.from({ length: fieldSize.numRows }, () =>
-        Array.from({ length: fieldSize.numColumns }, () => PlotState.DEFAULT)
+      Array.from({ length: newFieldSize.numRows }, () =>
+        Array.from({ length: newFieldSize.numColumns }, () => PlotState.DEFAULT)
       )
     );
     setIsGameOver(false);
@@ -227,10 +249,19 @@ const Minesweeper = () => {
 
   return (
     <>
+      <select onChange={changeFieldSize}>
+        {fieldSizeOptions.map((option) => (
+          <option key={option.value} value={option.value}>
+            {option.label}
+          </option>
+        ))}
+      </select>
       {isGameWon && <p>You win!</p>}
-      <span>{flagsLeft}</span>
-      <button onClick={resetField}>Reset</button>
-      <span>{Math.trunc(elapsedTime / 1000)}</span>
+      <div>
+        <span>{flagsLeft}</span>
+        <button onClick={() => resetField(fieldSize)}>Reset</button>
+        <span>{Math.trunc(elapsedTime / 1000)}</span>
+      </div>
       {minefield.map((row, rowIndex) => (
         <Row key={rowIndex}>
           {row.map((plotValue, columnIndex) => (

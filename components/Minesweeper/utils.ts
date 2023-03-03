@@ -12,6 +12,11 @@ export enum PlotState {
 /**
  * FIELD SIZE CONFIGURATIONS
  */
+export type FieldSizeConfig = {
+  numRows: number;
+  numColumns: number;
+  numMines: number;
+};
 export const FieldSize = {
   BEGINNER: {
     numRows: 9,

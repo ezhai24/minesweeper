@@ -19,7 +19,7 @@ const Plot = styled.span({
 
 const Minesweeper = () => {
   const [fieldSize] = useState(FieldSize.BEGINNER);
-  const [minefield] = useState(
+  const [minefield, setMinefield] = useState(
     generateMinefield(
       fieldSize.numRows,
       fieldSize.numColumns,
@@ -181,9 +181,26 @@ const Minesweeper = () => {
     }
   };
 
+  const resetField = () => {
+    setMinefield(
+      generateMinefield(
+        fieldSize.numRows,
+        fieldSize.numColumns,
+        fieldSize.numMines
+      )
+    );
+    setPlotStates(
+      Array.from({ length: fieldSize.numRows }, () =>
+        Array.from({ length: fieldSize.numColumns }, () => PlotState.DEFAULT)
+      )
+    );
+    setIsGameOver(false);
+  };
+
   return (
     <>
       {isGameWon && <p>You win!</p>}
+      <button onClick={resetField}>Reset</button>
       {minefield.map((row, rowIndex) => (
         <Row key={rowIndex}>
           {row.map((plotValue, columnIndex) => (

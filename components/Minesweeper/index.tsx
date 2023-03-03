@@ -29,6 +29,19 @@ const Minesweeper = () => {
     )
   );
 
+  const getPlotDisplayValue = (plotState: PlotState, plotValue: number) => {
+    switch (plotState) {
+      case PlotState.SWEPT:
+        return plotValue;
+      case PlotState.FLAGGED:
+        return '!';
+      case PlotState.QUESTION:
+        return '?';
+      default:
+        return '';
+    }
+  };
+
   const sweepAdjacentPlots = (
     currentPlotStates: PlotState[][],
     row: number,
@@ -74,11 +87,37 @@ const Minesweeper = () => {
       return;
     }
 
+    // Users believe this is a mine plot so they should not be able to sweep it.
+    if (plotStates[row][column] === PlotState.FLAGGED) {
+      return;
+    }
+
     // Sweep the current plot. For ergonomics, recurse adjacent plots and sweep
     // any 3x3 sections that do not have any mines in the entire section.
     const newPlotStates = plotStates.map((row) => row.slice());
     newPlotStates[row][column] = PlotState.SWEPT;
     sweepAdjacentPlots(newPlotStates, row, column);
+    setPlotStates(newPlotStates);
+  };
+
+  const flagPlot = (
+    e: MouseEvent<HTMLSpanElement>,
+    row: number,
+    column: number
+  ) => {
+    e.preventDefault();
+    const newPlotStates = plotStates.map((row) => row.slice());
+    switch (plotStates[row][column]) {
+      case PlotState.DEFAULT:
+        newPlotStates[row][column] = PlotState.FLAGGED;
+        break;
+      case PlotState.FLAGGED:
+        newPlotStates[row][column] = PlotState.QUESTION;
+        break;
+      case PlotState.QUESTION:
+        newPlotStates[row][column] = PlotState.DEFAULT;
+        break;
+    }
     setPlotStates(newPlotStates);
   };
 
@@ -90,10 +129,12 @@ const Minesweeper = () => {
             <Plot
               key={columnIndex}
               onMouseUp={(e) => sweepPlot(e, rowIndex, columnIndex)}
+              onContextMenu={(e) => flagPlot(e, rowIndex, columnIndex)}
             >
-              {plotStates[rowIndex][columnIndex] === PlotState.SWEPT
-                ? plotValue
-                : ''}
+              {getPlotDisplayValue(
+                plotStates[rowIndex][columnIndex],
+                plotValue
+              )}
             </Plot>
           ))}
         </Row>

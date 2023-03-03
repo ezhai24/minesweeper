@@ -34,10 +34,15 @@ const Minesweeper = () => {
   const [isGameOver, setIsGameOver] = useState(false);
 
   let unsweptPlots = 0;
+  let flagsLeft = fieldSize.numMines;
   plotStates.forEach((row) =>
     row.forEach((plotState) => {
       if (plotState !== PlotState.SWEPT) {
         unsweptPlots++;
+      }
+
+      if (plotState === PlotState.FLAGGED) {
+        flagsLeft--;
       }
     })
   );
@@ -200,6 +205,7 @@ const Minesweeper = () => {
   return (
     <>
       {isGameWon && <p>You win!</p>}
+      <span>{flagsLeft}</span>
       <button onClick={resetField}>Reset</button>
       {minefield.map((row, rowIndex) => (
         <Row key={rowIndex}>

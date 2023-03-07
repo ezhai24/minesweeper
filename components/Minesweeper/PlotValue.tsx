@@ -40,7 +40,7 @@ const PlotValue = (props: Props) => {
 
   switch (plotState) {
     case PlotState.SWEPT:
-      return <>{plotValue}</>;
+      return <>{plotValue || ''}</>;
     case PlotState.FLAGGED:
       return <>!</>;
     case PlotState.QUESTION:

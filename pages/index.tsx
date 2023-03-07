@@ -29,6 +29,7 @@ const Home = () => {
           </a>
           <span> license.</span>
         </div>
+        <div>Ocean texture by me, inspired by Pokémon.</div>
       </Attributions>
     </>
   );

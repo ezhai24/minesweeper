@@ -8,10 +8,13 @@ const Row = styled.div({
 });
 
 const Plot = styled.span({
-  width: 16,
-  height: 16,
+  display: 'flex',
+  width: 32,
+  height: 32,
   border: '1px solid black',
-  textAlign: 'center',
+  justifyContent: 'center',
+  alignItems: 'center',
+  fontFamily: 'Minesweeper',
 });
 
 const Minesweeper = () => {

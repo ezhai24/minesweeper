@@ -31,8 +31,29 @@ const Minesweeper = () => {
       Array.from({ length: fieldSize.numColumns }, () => PlotState.DEFAULT)
     )
   );
+  const [isGameOver, setIsGameOver] = useState(false);
 
   const getPlotDisplayValue = (plotState: PlotState, plotValue: number) => {
+    // If the user has lost the game, we want to specify the detonated mine then
+    // reveal all other mines. For the rest of the plots without mines, we want
+    // to indicate any that were incorrectly flagged. For all other plots,
+    // fallback to the usual value.
+    if (isGameOver) {
+      if (plotState === PlotState.DETONATED) {
+        return 'D';
+      }
+
+      if (plotState === PlotState.FLAGGED) {
+        if (plotValue !== -1) {
+          return 'X';
+        }
+      } else {
+        if (plotValue === -1) {
+          return '*';
+        }
+      }
+    }
+
     switch (plotState) {
       case PlotState.SWEPT:
         return plotValue;
@@ -80,26 +101,22 @@ const Minesweeper = () => {
     row: number,
     column: number
   ) => {
-    // The convention for Minesweeper is to hold off on sweeping a plot until
-    // the user has released the mouse button (onMouseUp). React v16+ does not
-    // differentiate between left/right clicks for this event handler so we do a
-    // manual check here. Return on right click since it should flag the plot
-    // rather than sweep it.
-    const isRightClick = e.nativeEvent.button === 2;
-    if (isRightClick) {
-      return;
-    }
-
     // Users believe this is a mine plot so they should not be able to sweep it.
     if (plotStates[row][column] === PlotState.FLAGGED) {
       return;
     }
 
-    // Sweep the current plot. For ergonomics, recurse adjacent plots and sweep
-    // any 3x3 sections that do not have any mines in the entire section.
     const newPlotStates = plotStates.map((row) => row.slice());
-    newPlotStates[row][column] = PlotState.SWEPT;
-    sweepAdjacentPlots(newPlotStates, row, column);
+    if (minefield[row][column] === -1) {
+      // User clicked on a mine plot. Detonate mine and end game :(
+      newPlotStates[row][column] = PlotState.DETONATED;
+      setIsGameOver(true);
+    } else {
+      // Sweep the current plot. For ergonomics, recurse adjacent plots and
+      // sweep any 3x3 sections that don't have any mines in the entire section.
+      newPlotStates[row][column] = PlotState.SWEPT;
+      sweepAdjacentPlots(newPlotStates, row, column);
+    }
     setPlotStates(newPlotStates);
   };
 
@@ -124,6 +141,24 @@ const Minesweeper = () => {
     setPlotStates(newPlotStates);
   };
 
+  const actionPlot = (
+    e: MouseEvent<HTMLSpanElement>,
+    row: number,
+    column: number
+  ) => {
+    if (isGameOver) {
+      return;
+    }
+
+    const isLeftMouseUp = e.type === 'mouseup' && e.nativeEvent.button === 0;
+    const isRightClick = e.type === 'contextmenu' && e.nativeEvent.button === 2;
+    if (isLeftMouseUp) {
+      sweepPlot(e, row, column);
+    } else if (isRightClick) {
+      flagPlot(e, row, column);
+    }
+  };
+
   return (
     <>
       {minefield.map((row, rowIndex) => (
@@ -131,8 +166,8 @@ const Minesweeper = () => {
           {row.map((plotValue, columnIndex) => (
             <Plot
               key={columnIndex}
-              onMouseUp={(e) => sweepPlot(e, rowIndex, columnIndex)}
-              onContextMenu={(e) => flagPlot(e, rowIndex, columnIndex)}
+              onMouseUp={(e) => actionPlot(e, rowIndex, columnIndex)}
+              onContextMenu={(e) => actionPlot(e, rowIndex, columnIndex)}
             >
               {getPlotDisplayValue(
                 plotStates[rowIndex][columnIndex],

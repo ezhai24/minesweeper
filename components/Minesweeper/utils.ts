@@ -6,6 +6,7 @@ export enum PlotState {
   SWEPT = 'SWEPT',
   FLAGGED = 'FLAGGED',
   QUESTION = 'QUESTION',
+  DETONATED = 'DETONATED',
 }
 
 /**

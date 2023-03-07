@@ -1,4 +1,14 @@
 /**
+ * PLOT STATES
+ */
+export enum PlotState {
+  DEFAULT = 'DEFAULT',
+  SWEPT = 'SWEPT',
+  FLAGGED = 'FLAGGED',
+  QUESTION = 'QUESTION',
+}
+
+/**
  * FIELD SIZE CONFIGURATIONS
  */
 export const FieldSize = {

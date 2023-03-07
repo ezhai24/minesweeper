@@ -3,6 +3,7 @@ import { ChangeEvent, MouseEvent, useEffect, useState } from 'react';
 
 import { useStopwatch } from '@/hooks/useStopwatch';
 
+import Plot from './Plot';
 import {
   FieldSize,
   FieldSizeConfig,
@@ -19,16 +20,6 @@ const fieldSizeOptions: FieldSizeOption[] = [
 
 const Row = styled.div({
   display: 'flex',
-});
-
-const Plot = styled.span({
-  display: 'flex',
-  width: 32,
-  height: 32,
-  border: '1px solid black',
-  justifyContent: 'center',
-  alignItems: 'center',
-  fontFamily: 'Minesweeper',
 });
 
 const Minesweeper = () => {
@@ -90,47 +81,6 @@ const Minesweeper = () => {
     resetField(newFieldSize);
   };
 
-  const getPlotDisplayValue = (plotState: PlotState, plotValue: number) => {
-    // If the user has won, mark all mines as flagged regardless of whether
-    // they've been flagged manually.
-    if (isGameWon) {
-      if (plotValue === -1) {
-        return '!';
-      }
-    }
-
-    // If the user has lost the game, we want to specify the detonated mine then
-    // reveal all other mines. For the rest of the plots without mines, we want
-    // to indicate any that were incorrectly flagged. For all other plots,
-    // fallback to the usual value.
-    if (isGameOver) {
-      if (plotState === PlotState.DETONATED) {
-        return 'D';
-      }
-
-      if (plotState === PlotState.FLAGGED) {
-        if (plotValue !== -1) {
-          return 'X';
-        }
-      } else {
-        if (plotValue === -1) {
-          return '*';
-        }
-      }
-    }
-
-    switch (plotState) {
-      case PlotState.SWEPT:
-        return plotValue;
-      case PlotState.FLAGGED:
-        return '!';
-      case PlotState.QUESTION:
-        return '?';
-      default:
-        return '';
-    }
-  };
-
   const sweepAdjacentPlots = (
     currentPlotStates: PlotState[][],
     row: number,
@@ -161,11 +111,7 @@ const Minesweeper = () => {
     }
   };
 
-  const sweepPlot = (
-    e: MouseEvent<HTMLSpanElement>,
-    row: number,
-    column: number
-  ) => {
+  const sweepPlot = (e: MouseEvent, row: number, column: number) => {
     // Users believe this is a mine plot so they should not be able to sweep it.
     if (plotStates[row][column] === PlotState.FLAGGED) {
       return;
@@ -185,11 +131,7 @@ const Minesweeper = () => {
     setPlotStates(newPlotStates);
   };
 
-  const flagPlot = (
-    e: MouseEvent<HTMLSpanElement>,
-    row: number,
-    column: number
-  ) => {
+  const flagPlot = (e: MouseEvent, row: number, column: number) => {
     e.preventDefault();
     const newPlotStates = plotStates.map((row) => row.slice());
     switch (plotStates[row][column]) {
@@ -206,11 +148,7 @@ const Minesweeper = () => {
     setPlotStates(newPlotStates);
   };
 
-  const actionPlot = (
-    e: MouseEvent<HTMLSpanElement>,
-    row: number,
-    column: number
-  ) => {
+  const actionPlot = (e: MouseEvent, row: number, column: number) => {
     if (isGameWon || isGameOver) {
       return;
     }
@@ -267,14 +205,13 @@ const Minesweeper = () => {
           {row.map((plotValue, columnIndex) => (
             <Plot
               key={columnIndex}
-              onMouseUp={(e) => actionPlot(e, rowIndex, columnIndex)}
-              onContextMenu={(e) => actionPlot(e, rowIndex, columnIndex)}
-            >
-              {getPlotDisplayValue(
-                plotStates[rowIndex][columnIndex],
-                plotValue
-              )}
-            </Plot>
+              plotState={plotStates[rowIndex][columnIndex]}
+              plotValue={plotValue}
+              onSweepPlot={(e) => actionPlot(e, rowIndex, columnIndex)}
+              onFlagPlot={(e) => actionPlot(e, rowIndex, columnIndex)}
+              isGameWon={isGameWon}
+              isGameOver={isGameOver}
+            />
           ))}
         </Row>
       ))}

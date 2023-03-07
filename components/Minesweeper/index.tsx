@@ -1,5 +1,7 @@
 import styled from '@emotion/styled';
-import { MouseEvent, useState } from 'react';
+import { MouseEvent, useEffect, useState } from 'react';
+
+import { useStopwatch } from '@/hooks/useStopwatch';
 
 import { FieldSize, generateMinefield, PlotState } from './utils';
 
@@ -18,6 +20,14 @@ const Plot = styled.span({
 });
 
 const Minesweeper = () => {
+  const {
+    elapsedTime,
+    isStopwatchRunning,
+    startStopwatch,
+    stopStopwatch,
+    resetStopwatch,
+  } = useStopwatch();
+
   const [fieldSize] = useState(FieldSize.BEGINNER);
   const [minefield, setMinefield] = useState(
     generateMinefield(
@@ -51,6 +61,12 @@ const Minesweeper = () => {
   // field and the user has not ended the game by detonating any mines yet.
   // The remaining unswept plots must all be mines and the user has won.
   const isGameWon = unsweptPlots === fieldSize.numMines && !isGameOver;
+
+  useEffect(() => {
+    if (isGameWon || isGameOver) {
+      stopStopwatch();
+    }
+  }, [stopStopwatch, isGameWon, isGameOver]);
 
   const getPlotDisplayValue = (plotState: PlotState, plotValue: number) => {
     // If the user has won, mark all mines as flagged regardless of whether
@@ -177,6 +193,10 @@ const Minesweeper = () => {
       return;
     }
 
+    if (!isStopwatchRunning) {
+      startStopwatch();
+    }
+
     const isLeftMouseUp = e.type === 'mouseup' && e.nativeEvent.button === 0;
     const isRightClick = e.type === 'contextmenu' && e.nativeEvent.button === 2;
     if (isLeftMouseUp) {
@@ -200,6 +220,9 @@ const Minesweeper = () => {
       )
     );
     setIsGameOver(false);
+
+    stopStopwatch();
+    resetStopwatch();
   };
 
   return (
@@ -207,6 +230,7 @@ const Minesweeper = () => {
       {isGameWon && <p>You win!</p>}
       <span>{flagsLeft}</span>
       <button onClick={resetField}>Reset</button>
+      <span>{Math.trunc(elapsedTime / 1000)}</span>
       {minefield.map((row, rowIndex) => (
         <Row key={rowIndex}>
           {row.map((plotValue, columnIndex) => (

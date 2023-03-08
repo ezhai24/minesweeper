@@ -45,6 +45,7 @@ const Content = styled.div({
 interface Props {
   plotState: PlotState;
   plotValue: number;
+  onMouseDown: MouseEventHandler;
   onSweepPlot: MouseEventHandler;
   onFlagPlot: MouseEventHandler;
   isGameWon: boolean;
@@ -55,6 +56,7 @@ const Plot = (props: Props) => {
   const {
     plotState,
     plotValue,
+    onMouseDown,
     onSweepPlot,
     onFlagPlot,
     isGameWon,
@@ -73,6 +75,7 @@ const Plot = (props: Props) => {
   return (
     <FieldPlot
       isPlotUncovered={isPlotUncovered}
+      onMouseDown={onMouseDown}
       onMouseUp={onSweepPlot}
       onContextMenu={onFlagPlot}
     >

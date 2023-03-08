@@ -4,6 +4,7 @@ import { ChangeEvent, MouseEvent, useEffect, useState } from 'react';
 import { useStopwatch } from '@/hooks/useStopwatch';
 
 import Plot from './Plot';
+import Sailor from './Sailor';
 import {
   FieldSize,
   FieldSizeConfig,
@@ -27,9 +28,18 @@ const TickerPanel = styled.div({
   marginTop: 20,
   marginBottom: 10,
   justifyContent: 'space-between',
+  alignItems: 'flex-end',
   fontFamily: 'LCD Calculator',
   fontSize: 24,
   letterSpacing: 2,
+});
+
+const ResetButton = styled.div({
+  border: 'none',
+  backgroundColor: 'none',
+  ':hover': {
+    cursor: 'pointer',
+  },
 });
 
 const Row = styled.div({
@@ -58,6 +68,7 @@ const Minesweeper = () => {
       Array.from({ length: fieldSize.numColumns }, () => PlotState.DEFAULT)
     )
   );
+  const [isMouseDown, setIsMouseDown] = useState(false);
   const [isGameOver, setIsGameOver] = useState(false);
 
   let unsweptPlots = 0;
@@ -162,6 +173,18 @@ const Minesweeper = () => {
     setPlotStates(newPlotStates);
   };
 
+  const attemptActionOnPlot = (e: MouseEvent) => {
+    const isRightClick = e.nativeEvent.button === 2;
+    if (isRightClick) {
+      return;
+    }
+
+    setIsMouseDown(true);
+    document.addEventListener('mouseup', () => setIsMouseDown(false), {
+      once: true,
+    });
+  };
+
   const actionPlot = (e: MouseEvent, row: number, column: number) => {
     if (isGameWon || isGameOver) {
       return;
@@ -208,10 +231,15 @@ const Minesweeper = () => {
           </option>
         ))}
       </select>
-      {isGameWon && <p>You win!</p>}
       <TickerPanel>
         <span>{flagsLeft.toString().padStart(3, '0')}</span>
-        <button onClick={() => resetField(fieldSize)}>Reset</button>
+        <ResetButton onClick={() => resetField(fieldSize)}>
+          <Sailor
+            isMouseDown={isMouseDown}
+            isGameWon={isGameWon}
+            isGameOver={isGameOver}
+          />
+        </ResetButton>
         <span>
           {Math.trunc(elapsedTime / 1000)
             .toString()
@@ -225,6 +253,7 @@ const Minesweeper = () => {
               key={columnIndex}
               plotState={plotStates[rowIndex][columnIndex]}
               plotValue={plotValue}
+              onMouseDown={attemptActionOnPlot}
               onSweepPlot={(e) => actionPlot(e, rowIndex, columnIndex)}
               onFlagPlot={(e) => actionPlot(e, rowIndex, columnIndex)}
               isGameWon={isGameWon}

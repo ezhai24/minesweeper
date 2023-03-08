@@ -24,6 +24,11 @@ const Home = () => {
       link: `https://www.freepik.com/free-vector/cartoon-set-bomb-explosion-eff
         ects_5056889.htm#query=explosion&position=4&from_view=search&track=sph`,
     },
+    sailorSvg: {
+      link: `https://www.freepik.com/free-vector/marine-character-elements-
+        collection_5192061.htm#query=ship%20captain&position=20&from_view=search
+        &track=ais`,
+    },
   };
 
   return (
@@ -55,6 +60,10 @@ const Home = () => {
         <div>
           <span>Explosion image by </span>
           <a href={attributions.explosionSvg.link}>Freepik</a>.
+        </div>
+        <div>
+          <span>Base sailor image by </span>
+          <a href={attributions.sailorSvg.link}>Freepik</a>. Modified by me.
         </div>
         <div>Ocean texture by me, inspired by Pokémon.</div>
         <div>

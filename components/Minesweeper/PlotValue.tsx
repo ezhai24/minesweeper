@@ -1,4 +1,20 @@
-import { PlotState } from './utils';
+import styled from '@emotion/styled';
+import Image from 'next/image';
+
+import { PlotNumberColors, PlotState } from './utils';
+
+const Flag = () => <Image src="/flag.svg" alt="Flag" width={18} height={18} />;
+const Mine = () => <Image src="/mine.svg" alt="Mine" width={24} height={24} />;
+const CrossedOutMine = () => (
+  <Image src="/crossed-out-mine.svg" alt="Mine with X" width={24} height={24} />
+);
+const ExplodedMine = () => (
+  <Image src="/explosion.svg" alt="Explosion" width={32} height={32} />
+);
+const Number = styled.span(({ color }: { color: string }) => ({
+  color: color || 'black',
+  WebkitTextStroke: '1px white',
+}));
 
 interface Props {
   plotState: PlotState;
@@ -14,7 +30,7 @@ const PlotValue = (props: Props) => {
   // they've been flagged manually.
   if (isGameWon) {
     if (plotValue === -1) {
-      return <>!</>;
+      return <Flag />;
     }
   }
 
@@ -24,25 +40,27 @@ const PlotValue = (props: Props) => {
   // fallback to the usual value.
   if (isGameOver) {
     if (plotState === PlotState.DETONATED) {
-      return <>D</>;
+      return <ExplodedMine />;
     }
 
     if (plotState === PlotState.FLAGGED) {
       if (plotValue !== -1) {
-        return <>X</>;
+        return <CrossedOutMine />;
       }
     } else {
       if (plotValue === -1) {
-        return <>*</>;
+        return <Mine />;
       }
     }
   }
 
   switch (plotState) {
     case PlotState.SWEPT:
-      return <>{plotValue || ''}</>;
+      return (
+        <Number color={PlotNumberColors[plotValue]}>{plotValue || ''}</Number>
+      );
     case PlotState.FLAGGED:
-      return <>!</>;
+      return <Flag />;
     case PlotState.QUESTION:
       return <>?</>;
   }

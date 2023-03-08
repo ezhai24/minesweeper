@@ -9,6 +9,17 @@ export enum PlotState {
   DETONATED = 'DETONATED',
 }
 
+export const PlotNumberColors: Record<number, string> = {
+  1: '#0000FF',
+  2: '#008200',
+  3: '#FE0000',
+  4: '#000083',
+  5: '#840001',
+  6: '#008284',
+  7: '#840084',
+  8: '#757575',
+};
+
 /**
  * FIELD SIZE CONFIGURATIONS
  */

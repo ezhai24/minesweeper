@@ -13,6 +13,10 @@ const Home = () => {
       authorLink: 'https://fontstruct.com/fontstructors/593973/gezoda',
       licenseLink: 'https://creativecommons.org/licenses/by-sa/3.0/legalcode',
     },
+    explosionSvg: {
+      link: `https://www.freepik.com/free-vector/cartoon-set-bomb-explosion-eff
+        ects_5056889.htm#query=explosion&position=4&from_view=search&track=sph`,
+    },
   };
 
   return (
@@ -29,7 +33,14 @@ const Home = () => {
           </a>
           <span> license.</span>
         </div>
+        <div>
+          <span>Explosion image by </span>
+          <a href={attributions.explosionSvg.link}>Freepik</a>.
+        </div>
         <div>Ocean texture by me, inspired by Pokémon.</div>
+        <div>
+          Mines and flags replicated from original Minesweeper game by me.
+        </div>
       </Attributions>
     </>
   );

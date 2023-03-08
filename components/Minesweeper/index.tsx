@@ -18,6 +18,20 @@ const fieldSizeOptions: FieldSizeOption[] = [
   { label: 'Expert', value: 'EXPERT' },
 ];
 
+const Minefield = styled.div({
+  width: 'fit-content',
+});
+
+const TickerPanel = styled.div({
+  display: 'flex',
+  marginTop: 20,
+  marginBottom: 10,
+  justifyContent: 'space-between',
+  fontFamily: 'LCD Calculator',
+  fontSize: 24,
+  letterSpacing: 2,
+});
+
 const Row = styled.div({
   display: 'flex',
 });
@@ -186,7 +200,7 @@ const Minesweeper = () => {
   };
 
   return (
-    <>
+    <Minefield>
       <select onChange={changeFieldSize}>
         {fieldSizeOptions.map((option) => (
           <option key={option.value} value={option.value}>
@@ -195,11 +209,15 @@ const Minesweeper = () => {
         ))}
       </select>
       {isGameWon && <p>You win!</p>}
-      <div>
-        <span>{flagsLeft}</span>
+      <TickerPanel>
+        <span>{flagsLeft.toString().padStart(3, '0')}</span>
         <button onClick={() => resetField(fieldSize)}>Reset</button>
-        <span>{Math.trunc(elapsedTime / 1000)}</span>
-      </div>
+        <span>
+          {Math.trunc(elapsedTime / 1000)
+            .toString()
+            .padStart(3, '0')}
+        </span>
+      </TickerPanel>
       {minefield.map((row, rowIndex) => (
         <Row key={rowIndex}>
           {row.map((plotValue, columnIndex) => (
@@ -215,7 +233,7 @@ const Minesweeper = () => {
           ))}
         </Row>
       ))}
-    </>
+    </Minefield>
   );
 };
 

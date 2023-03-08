@@ -12,6 +12,14 @@ export default function Document() {
               font-family: 'Minesweeper';
               src: url('/fonts/mine-sweeper.ttf');
             }
+            @font-face {
+              font-family: 'Futuba';
+              src: url('/fonts/futaba-digital-7.ttf');
+            }
+            @font-face {
+              font-family: 'LCD Calculator';
+              src: url('/fonts/lcd-calculator-display-tight-7-segment.ttf');
+            }
           `}
         />
         <Main />

@@ -21,12 +21,10 @@ const Home = () => {
       authorLink: 'https://fontstruct.com/fontstructors/593973/gezoda',
       licenseLink: 'https://creativecommons.org/licenses/by-sa/3.0/legalcode',
     },
-    lcdFont: {
-      link: `https://fontstruct.com/fontstructions/show/1972066/
-        lcd-calculator-display-tight-7-segment`,
-      authorLink: 'https://fontstruct.com/fontstructors/1253492/xenfox',
-      licenseLink: `https://fontstruct.com/fontstructions/license/1972066/
-        lcd-calculator-display-tight-7-segment`,
+    segmentsFont: {
+      link: 'https://fontstruct.com/fontstructions/show/1462474/7segments-1',
+      authorLink: 'https://fontstruct.com/fontstructors/547600/g4mmler',
+      licenseLink: 'https://creativecommons.org/licenses/by-sa/3.0/legalcode',
     },
     explosionSvg: {
       link: `https://www.freepik.com/free-vector/cartoon-set-bomb-explosion-eff
@@ -64,14 +62,12 @@ const Home = () => {
             <span> license.</span>
           </li>
           <li>
-            <a href={attributions.lcdFont.link}>
-              LCD Calculator Display - Tight 7 Segment
-            </a>
+            <a href={attributions.segmentsFont.link}>7Segments</a>
             <span> font by </span>
-            <a href={attributions.lcdFont.authorLink}>Ryan Dunnison (Xenfox)</a>
-            <span>. Copyright (c) 2021-2023. Licensed under the </span>
-            <a href={attributions.lcdFont.licenseLink}>
-              SIL Open Font License, Version 1.1
+            <a href={attributions.segmentsFont.authorLink}>g4mmler</a>
+            <span>. Licensed under the </span>
+            <a href={attributions.segmentsFont.licenseLink}>
+              Creative Commons Attribution-Sharealike 3.0
             </a>
             <span> license.</span>
           </li>

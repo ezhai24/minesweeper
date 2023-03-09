@@ -29,9 +29,8 @@ const TickerPanel = styled.div({
   marginBottom: 10,
   justifyContent: 'space-between',
   alignItems: 'flex-end',
-  fontFamily: 'LCD Calculator',
+  fontFamily: 'Seven Segments',
   fontSize: 24,
-  letterSpacing: 2,
 });
 
 const ResetButton = styled.div({

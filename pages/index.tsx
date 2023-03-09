@@ -1,9 +1,17 @@
 import styled from '@emotion/styled';
+import { useState } from 'react';
 
 import Minesweeper from '@/components/Minesweeper';
 
-const Attributions = styled.div({
+const CreditsButton = styled.div({
   marginTop: 10,
+  ':hover': {
+    cursor: 'pointer',
+  },
+});
+
+const Attributions = styled.ul({
+  marginTop: 4,
 });
 
 const Home = () => {
@@ -31,45 +39,56 @@ const Home = () => {
     },
   };
 
+  const [isAttributionsShowing, setIsAttributionsShowiingng] = useState(false);
+
+  const toggleAttributions = () => setIsAttributionsShowiingng((prev) => !prev);
+
   return (
     <>
       <Minesweeper />
-      <Attributions>
-        <div>
-          <a href={attributions.minesweeperFont.link}>Mine-Sweeper</a>
-          <span> font by </span>
-          <a href={attributions.minesweeperFont.authorLink}>Gezoda</a>. Licensed
-          <span> under the </span>
-          <a href={attributions.minesweeperFont.licenseLink}>
-            Creative Commons Attribution-Sharealike 3.0
-          </a>
-          <span> license.</span>
-        </div>
-        <div>
-          <a href={attributions.lcdFont.link}>
-            LCD Calculator Display - Tight 7 Segment
-          </a>
-          <span> font by </span>
-          <a href={attributions.lcdFont.authorLink}>Ryan Dunnison (Xenfox)</a>
-          <span>. Copyright (c) 2021-2023. Licensed under the </span>
-          <a href={attributions.lcdFont.licenseLink}>
-            SIL Open Font License, Version 1.1
-          </a>
-          <span> license.</span>
-        </div>
-        <div>
-          <span>Explosion image by </span>
-          <a href={attributions.explosionSvg.link}>Freepik</a>.
-        </div>
-        <div>
-          <span>Base sailor image by </span>
-          <a href={attributions.sailorSvg.link}>Freepik</a>. Modified by me.
-        </div>
-        <div>Ocean texture by me, inspired by Pokémon.</div>
-        <div>
-          Mines and flags replicated from original Minesweeper game by me.
-        </div>
-      </Attributions>
+      <CreditsButton onClick={toggleAttributions}>
+        {isAttributionsShowing ? '- ' : '+ '}
+        Credits
+      </CreditsButton>
+      {isAttributionsShowing && (
+        <Attributions>
+          <li>
+            <a href={attributions.minesweeperFont.link}>Mine-Sweeper</a>
+            <span> font by </span>
+            <a href={attributions.minesweeperFont.authorLink}>Gezoda</a>.
+            Licensed
+            <span> under the </span>
+            <a href={attributions.minesweeperFont.licenseLink}>
+              Creative Commons Attribution-Sharealike 3.0
+            </a>
+            <span> license.</span>
+          </li>
+          <li>
+            <a href={attributions.lcdFont.link}>
+              LCD Calculator Display - Tight 7 Segment
+            </a>
+            <span> font by </span>
+            <a href={attributions.lcdFont.authorLink}>Ryan Dunnison (Xenfox)</a>
+            <span>. Copyright (c) 2021-2023. Licensed under the </span>
+            <a href={attributions.lcdFont.licenseLink}>
+              SIL Open Font License, Version 1.1
+            </a>
+            <span> license.</span>
+          </li>
+          <li>
+            <span>Explosion image by </span>
+            <a href={attributions.explosionSvg.link}>Freepik</a>.
+          </li>
+          <li>
+            <span>Base sailor image by </span>
+            <a href={attributions.sailorSvg.link}>Freepik</a>. Modified by me.
+          </li>
+          <li>Ocean texture by me, inspired by Pokémon.</li>
+          <li>
+            Mines and flags replicated from original Minesweeper game by me.
+          </li>
+        </Attributions>
+      )}
     </>
   );
 };

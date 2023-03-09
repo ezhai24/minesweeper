@@ -17,8 +17,8 @@ export default function App({ Component, pageProps }: AppProps) {
             src: url('/fonts/mine-sweeper.ttf');
           }
           @font-face {
-            font-family: 'LCD Calculator';
-            src: url('/fonts/lcd-calculator-display-tight-7-segment.ttf');
+            font-family: 'Seven Segments';
+            src: url('/fonts/7segments.ttf');
           }
         `}
       />

@@ -5,7 +5,7 @@ import { useStopwatch } from '@/hooks/useStopwatch';
 
 import DifficultySelect from './DifficultySelect';
 import Plot from './Plot';
-import Sailor from './Sailor';
+import TickerPanel from './TickerPanel';
 import {
   FieldSize,
   FieldSizeConfig,
@@ -15,24 +15,6 @@ import {
 
 const Minefield = styled.div({
   width: 'fit-content',
-});
-
-const TickerPanel = styled.div({
-  display: 'flex',
-  marginTop: 20,
-  marginBottom: 10,
-  justifyContent: 'space-between',
-  alignItems: 'flex-end',
-  fontFamily: 'Seven Segments',
-  fontSize: 24,
-});
-
-const ResetButton = styled.div({
-  border: 'none',
-  backgroundColor: 'none',
-  ':hover': {
-    cursor: 'pointer',
-  },
 });
 
 const Row = styled.div({
@@ -208,21 +190,15 @@ const Minesweeper = () => {
   return (
     <Minefield>
       <DifficultySelect setFieldSize={setFieldSize} resetField={resetField} />
-      <TickerPanel>
-        <span>{flagsLeft.toString().padStart(3, '0')}</span>
-        <ResetButton onClick={() => resetField(fieldSize)}>
-          <Sailor
-            isMouseDown={isMouseDown}
-            isGameWon={isGameWon}
-            isGameOver={isGameOver}
-          />
-        </ResetButton>
-        <span>
-          {Math.trunc(elapsedTime / 1000)
-            .toString()
-            .padStart(3, '0')}
-        </span>
-      </TickerPanel>
+      <TickerPanel
+        flagsLeft={flagsLeft}
+        isMouseDown={isMouseDown}
+        isGameWon={isGameWon}
+        isGameOver={isGameOver}
+        elapsedTime={elapsedTime}
+        fieldSize={fieldSize}
+        resetField={resetField}
+      />
       {minefield.map((row, rowIndex) => (
         <Row key={rowIndex}>
           {row.map((plotValue, columnIndex) => (

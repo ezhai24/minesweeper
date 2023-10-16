@@ -1,8 +1,9 @@
 import styled from '@emotion/styled';
-import { ChangeEvent, MouseEvent, useEffect, useState } from 'react';
+import { MouseEvent, useEffect, useState } from 'react';
 
 import { useStopwatch } from '@/hooks/useStopwatch';
 
+import DifficultySelect from './DifficultySelect';
 import Plot from './Plot';
 import Sailor from './Sailor';
 import {
@@ -11,13 +12,6 @@ import {
   generateMinefield,
   PlotState,
 } from './utils';
-
-type FieldSizeOption = { label: string; value: keyof typeof FieldSize };
-const fieldSizeOptions: FieldSizeOption[] = [
-  { label: 'Beginner', value: 'BEGINNER' },
-  { label: 'Intermediate', value: 'INTERMEDIATE' },
-  { label: 'Expert', value: 'EXPERT' },
-];
 
 const Minefield = styled.div({
   width: 'fit-content',
@@ -94,16 +88,6 @@ const Minesweeper = () => {
       stopStopwatch();
     }
   }, [stopStopwatch, isGameWon, isGameOver]);
-
-  const changeFieldSize = (e: ChangeEvent<HTMLSelectElement>) => {
-    if (!(e.target.value in FieldSize)) {
-      return;
-    }
-
-    const newFieldSize = FieldSize[e.target.value as keyof typeof FieldSize];
-    setFieldSize(newFieldSize);
-    resetField(newFieldSize);
-  };
 
   const sweepAdjacentPlots = (
     currentPlotStates: PlotState[][],
@@ -223,13 +207,7 @@ const Minesweeper = () => {
 
   return (
     <Minefield>
-      <select onChange={changeFieldSize}>
-        {fieldSizeOptions.map((option) => (
-          <option key={option.value} value={option.value}>
-            {option.label}
-          </option>
-        ))}
-      </select>
+      <DifficultySelect setFieldSize={setFieldSize} resetField={resetField} />
       <TickerPanel>
         <span>{flagsLeft.toString().padStart(3, '0')}</span>
         <ResetButton onClick={() => resetField(fieldSize)}>

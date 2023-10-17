@@ -38,7 +38,13 @@ const Sailor = (props: Props) => {
   }
 
   return (
-    <Image src="/sailor-default.svg" alt="sailor" height={64} width={64} />
+    <Image
+      priority
+      src="/sailor-default.svg"
+      alt="sailor"
+      height={64}
+      width={64}
+    />
   );
 };
 

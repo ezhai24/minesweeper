@@ -1,39 +1,77 @@
-import { ChangeEvent } from 'react';
+import styled from '@emotion/styled';
+import { motion } from 'framer-motion';
 
-import { FieldSize, FieldSizeConfig } from './utils';
+import { Difficulty, FieldSize, FieldSizeConfig } from './utils';
 
 type FieldSizeOption = { label: string; value: keyof typeof FieldSize };
 const fieldSizeOptions: FieldSizeOption[] = [
-  { label: 'Beginner', value: 'BEGINNER' },
-  { label: 'Intermediate', value: 'INTERMEDIATE' },
-  { label: 'Expert', value: 'EXPERT' },
+  { label: 'Beginner', value: Difficulty.BEGINNER },
+  { label: 'Intermediate', value: Difficulty.INTERMEDIATE },
+  { label: 'Expert', value: Difficulty.EXPERT },
 ];
 
+const ButtonBar = styled.div({
+  display: 'flex',
+  justifyContent: 'center',
+  gap: 10,
+});
+
+const Button = styled.button({
+  position: 'relative',
+  border: 'none',
+  padding: '5px 10px',
+  background: 'none',
+  color: 'white',
+  ':hover': {
+    cursor: 'pointer',
+  },
+});
+
+const ButtonLabel = styled.span({
+  zIndex: 1,
+  position: 'relative',
+  mixBlendMode: 'difference',
+});
+
 interface Props {
-  setFieldSize: (config: FieldSizeConfig) => void;
+  difficulty: Difficulty;
+  setDifficulty: (difficulty: Difficulty) => void;
   resetField: (config: FieldSizeConfig) => void;
 }
 const DifficultySelect = (props: Props) => {
-  const { setFieldSize, resetField } = props;
+  const { difficulty, setDifficulty, resetField } = props;
 
-  const changeFieldSize = (e: ChangeEvent<HTMLSelectElement>) => {
-    if (!(e.target.value in FieldSize)) {
-      return;
-    }
-
-    const newFieldSize = FieldSize[e.target.value as keyof typeof FieldSize];
-    setFieldSize(newFieldSize);
-    resetField(newFieldSize);
+  const changeFieldSize = (newDifficulty: Difficulty) => {
+    setDifficulty(newDifficulty);
+    resetField(FieldSize[newDifficulty]);
   };
 
   return (
-    <select onChange={changeFieldSize}>
+    <ButtonBar>
       {fieldSizeOptions.map((option) => (
-        <option key={option.value} value={option.value}>
-          {option.label}
-        </option>
+        <Button
+          key={option.value}
+          onClick={() => changeFieldSize(option.value)}
+        >
+          {option.value === difficulty ? (
+            <motion.div
+              layoutId="activePill"
+              style={{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                width: '100%',
+                height: '100%',
+                borderRadius: 20,
+                backgroundColor: 'black', // '#305065',
+              }}
+              transition={{ type: 'spring', duration: 0.4 }}
+            />
+          ) : null}
+          <ButtonLabel>{option.label}</ButtonLabel>
+        </Button>
       ))}
-    </select>
+    </ButtonBar>
   );
 };
 

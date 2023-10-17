@@ -7,6 +7,7 @@ import DifficultySelect from './DifficultySelect';
 import Plot from './Plot';
 import TickerPanel from './TickerPanel';
 import {
+  Difficulty,
   FieldSize,
   FieldSizeConfig,
   generateMinefield,
@@ -30,7 +31,10 @@ const Minesweeper = () => {
     resetStopwatch,
   } = useStopwatch();
 
-  const [fieldSize, setFieldSize] = useState(FieldSize.BEGINNER);
+  const [difficulty, setDifficulty] = useState(Difficulty.BEGINNER);
+
+  const fieldSize = FieldSize[difficulty];
+
   const [minefield, setMinefield] = useState(
     generateMinefield(
       fieldSize.numRows,
@@ -189,7 +193,11 @@ const Minesweeper = () => {
 
   return (
     <Minefield>
-      <DifficultySelect setFieldSize={setFieldSize} resetField={resetField} />
+      <DifficultySelect
+        difficulty={difficulty}
+        setDifficulty={setDifficulty}
+        resetField={resetField}
+      />
       <TickerPanel
         flagsLeft={flagsLeft}
         isMouseDown={isMouseDown}

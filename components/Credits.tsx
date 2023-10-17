@@ -1,4 +1,5 @@
 import styled from '@emotion/styled';
+import { AnimatePresence, motion } from 'framer-motion';
 import { useState } from 'react';
 
 const attributions = {
@@ -23,15 +24,37 @@ const attributions = {
   },
 };
 
+const listVariants = {
+  animate: {
+    transition: {
+      staggerChildren: 0.05,
+      staggerDirection: 1,
+    },
+  },
+  exit: {
+    transition: {
+      staggerChildren: 0.05,
+      staggerDirection: -1,
+    },
+  },
+};
+const itemVariants = {
+  initial: { y: -50, opacity: 0 },
+  animate: { y: 0, opacity: 1 },
+  exit: { y: -10, opacity: 0 },
+};
+
+const Container = styled.div({
+  height: 190,
+});
 const CreditsButton = styled.div({
-  marginTop: 10,
+  display: 'flex',
+  justifyContent: 'center',
+  gap: 5,
+  marginTop: 40,
   ':hover': {
     cursor: 'pointer',
   },
-});
-
-const Attributions = styled.ul({
-  marginTop: 4,
 });
 
 export const Credits = () => {
@@ -40,48 +63,65 @@ export const Credits = () => {
   const toggleAttributions = () => setIsAttributionsShowing((prev) => !prev);
 
   return (
-    <>
+    <Container>
       <CreditsButton onClick={toggleAttributions}>
-        {isAttributionsShowing ? '- ' : '+ '}
         Credits
+        <motion.div animate={{ rotate: isAttributionsShowing ? -135 : 0 }}>
+          +
+        </motion.div>
       </CreditsButton>
-      {isAttributionsShowing && (
-        <Attributions>
-          <li>
-            <a href={attributions.minesweeperFont.link}>Mine-Sweeper</a>
-            <span> font by </span>
-            <a href={attributions.minesweeperFont.authorLink}>Gezoda</a>.
-            Licensed
-            <span> under the </span>
-            <a href={attributions.minesweeperFont.licenseLink}>
-              Creative Commons Attribution-Sharealike 3.0
-            </a>
-            <span> license.</span>
-          </li>
-          <li>
-            <a href={attributions.segmentsFont.link}>7Segments</a>
-            <span> font by </span>
-            <a href={attributions.segmentsFont.authorLink}>g4mmler</a>
-            <span>. Licensed under the </span>
-            <a href={attributions.segmentsFont.licenseLink}>
-              Creative Commons Attribution-Sharealike 3.0
-            </a>
-            <span> license.</span>
-          </li>
-          <li>
-            <span>Explosion image by </span>
-            <a href={attributions.explosionSvg.link}>Freepik</a>.
-          </li>
-          <li>
-            <span>Base sailor image by </span>
-            <a href={attributions.sailorSvg.link}>Freepik</a>. Modified by me.
-          </li>
-          <li>Ocean texture by me, inspired by Pokémon.</li>
-          <li>
-            Mines and flags replicated from original Minesweeper game by me.
-          </li>
-        </Attributions>
-      )}
-    </>
+      <AnimatePresence>
+        {isAttributionsShowing && (
+          <motion.ul
+            key="attributions"
+            variants={listVariants}
+            initial="initial"
+            animate="animate"
+            exit="exit"
+            style={{
+              marginTop: 4,
+              listStyleType: 'none',
+              textAlign: 'center',
+            }}
+          >
+            <motion.li variants={itemVariants}>
+              <a href={attributions.minesweeperFont.link}>Mine-Sweeper</a>
+              <span> font by </span>
+              <a href={attributions.minesweeperFont.authorLink}>Gezoda</a>.
+              Licensed
+              <span> under the </span>
+              <a href={attributions.minesweeperFont.licenseLink}>
+                Creative Commons Attribution-Sharealike 3.0
+              </a>
+              <span> license.</span>
+            </motion.li>
+            <motion.li variants={itemVariants}>
+              <a href={attributions.segmentsFont.link}>7Segments</a>
+              <span> font by </span>
+              <a href={attributions.segmentsFont.authorLink}>g4mmler</a>
+              <span>. Licensed under the </span>
+              <a href={attributions.segmentsFont.licenseLink}>
+                Creative Commons Attribution-Sharealike 3.0
+              </a>
+              <span> license.</span>
+            </motion.li>
+            <motion.li variants={itemVariants}>
+              <span>Explosion image by </span>
+              <a href={attributions.explosionSvg.link}>Freepik</a>.
+            </motion.li>
+            <motion.li variants={itemVariants}>
+              <span>Base sailor image by </span>
+              <a href={attributions.sailorSvg.link}>Freepik</a>. Modified by me.
+            </motion.li>
+            <motion.li variants={itemVariants}>
+              Ocean texture by me, inspired by Pokémon.
+            </motion.li>
+            <motion.li variants={itemVariants}>
+              Mines and flags replicated from original Minesweeper game by me.
+            </motion.li>
+          </motion.ul>
+        )}
+      </AnimatePresence>
+    </Container>
   );
 };

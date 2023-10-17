@@ -23,23 +23,28 @@ export const PlotNumberColors: Record<number, string> = {
 /**
  * FIELD SIZE CONFIGURATIONS
  */
+export enum Difficulty {
+  BEGINNER,
+  INTERMEDIATE,
+  EXPERT,
+}
 export type FieldSizeConfig = {
   numRows: number;
   numColumns: number;
   numMines: number;
 };
 export const FieldSize = {
-  BEGINNER: {
+  [Difficulty.BEGINNER]: {
     numRows: 9,
     numColumns: 9,
     numMines: 10,
   },
-  INTERMEDIATE: {
+  [Difficulty.INTERMEDIATE]: {
     numRows: 16,
     numColumns: 16,
     numMines: 40,
   },
-  EXPERT: {
+  [Difficulty.EXPERT]: {
     numRows: 16,
     numColumns: 30,
     numMines: 99,

@@ -1,44 +1,21 @@
 import styled from '@emotion/styled';
-import { ChangeEvent, MouseEvent, useEffect, useState } from 'react';
+import { MouseEvent, useEffect, useState } from 'react';
 
 import { useStopwatch } from '@/hooks/useStopwatch';
 
+import DifficultySelect from './DifficultySelect';
 import Plot from './Plot';
-import Sailor from './Sailor';
+import TickerPanel from './TickerPanel';
 import {
+  Difficulty,
   FieldSize,
   FieldSizeConfig,
   generateMinefield,
   PlotState,
 } from './utils';
 
-type FieldSizeOption = { label: string; value: keyof typeof FieldSize };
-const fieldSizeOptions: FieldSizeOption[] = [
-  { label: 'Beginner', value: 'BEGINNER' },
-  { label: 'Intermediate', value: 'INTERMEDIATE' },
-  { label: 'Expert', value: 'EXPERT' },
-];
-
 const Minefield = styled.div({
   width: 'fit-content',
-});
-
-const TickerPanel = styled.div({
-  display: 'flex',
-  marginTop: 20,
-  marginBottom: 10,
-  justifyContent: 'space-between',
-  alignItems: 'flex-end',
-  fontFamily: 'Seven Segments',
-  fontSize: 24,
-});
-
-const ResetButton = styled.div({
-  border: 'none',
-  backgroundColor: 'none',
-  ':hover': {
-    cursor: 'pointer',
-  },
 });
 
 const Row = styled.div({
@@ -54,7 +31,10 @@ const Minesweeper = () => {
     resetStopwatch,
   } = useStopwatch();
 
-  const [fieldSize, setFieldSize] = useState(FieldSize.BEGINNER);
+  const [difficulty, setDifficulty] = useState(Difficulty.BEGINNER);
+
+  const fieldSize = FieldSize[difficulty];
+
   const [minefield, setMinefield] = useState(
     generateMinefield(
       fieldSize.numRows,
@@ -94,16 +74,6 @@ const Minesweeper = () => {
       stopStopwatch();
     }
   }, [stopStopwatch, isGameWon, isGameOver]);
-
-  const changeFieldSize = (e: ChangeEvent<HTMLSelectElement>) => {
-    if (!(e.target.value in FieldSize)) {
-      return;
-    }
-
-    const newFieldSize = FieldSize[e.target.value as keyof typeof FieldSize];
-    setFieldSize(newFieldSize);
-    resetField(newFieldSize);
-  };
 
   const sweepAdjacentPlots = (
     currentPlotStates: PlotState[][],
@@ -223,28 +193,20 @@ const Minesweeper = () => {
 
   return (
     <Minefield>
-      <select onChange={changeFieldSize}>
-        {fieldSizeOptions.map((option) => (
-          <option key={option.value} value={option.value}>
-            {option.label}
-          </option>
-        ))}
-      </select>
-      <TickerPanel>
-        <span>{flagsLeft.toString().padStart(3, '0')}</span>
-        <ResetButton onClick={() => resetField(fieldSize)}>
-          <Sailor
-            isMouseDown={isMouseDown}
-            isGameWon={isGameWon}
-            isGameOver={isGameOver}
-          />
-        </ResetButton>
-        <span>
-          {Math.trunc(elapsedTime / 1000)
-            .toString()
-            .padStart(3, '0')}
-        </span>
-      </TickerPanel>
+      <DifficultySelect
+        difficulty={difficulty}
+        setDifficulty={setDifficulty}
+        resetField={resetField}
+      />
+      <TickerPanel
+        flagsLeft={flagsLeft}
+        isMouseDown={isMouseDown}
+        isGameWon={isGameWon}
+        isGameOver={isGameOver}
+        elapsedTime={elapsedTime}
+        fieldSize={fieldSize}
+        resetField={resetField}
+      />
       {minefield.map((row, rowIndex) => (
         <Row key={rowIndex}>
           {row.map((plotValue, columnIndex) => (

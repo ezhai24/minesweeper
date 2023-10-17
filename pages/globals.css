@@ -1,0 +1,16 @@
+@font-face {
+  font-family: 'Minesweeper';
+  src: url('/fonts/mine-sweeper.ttf');
+}
+@font-face {
+  font-family: 'Seven Segments';
+  src: url('/fonts/7segments.ttf');
+  font-display: swap;
+}
+
+#__next {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: white;
+}

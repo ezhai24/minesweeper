@@ -4,6 +4,7 @@
 A quick recreation of Microsoft's 1990 hit classic, Minesweeper. Play it [here](https://minesweeper-three-red.vercel.app/)!
 
 Built with!
+- [framer-motion](https://www.framer.com/motion/)
 - [Built-in React Hooks](https://react.dev/reference/react)
 - [Custom React Hooks](https://react.dev/learn/reusing-logic-with-custom-hooks)
 - [Styled Components](https://emotion.sh/docs/styled)

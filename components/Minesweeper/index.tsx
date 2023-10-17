@@ -207,22 +207,24 @@ const Minesweeper = () => {
         fieldSize={fieldSize}
         resetField={resetField}
       />
-      {minefield.map((row, rowIndex) => (
-        <Row key={rowIndex}>
-          {row.map((plotValue, columnIndex) => (
-            <Plot
-              key={columnIndex}
-              plotState={plotStates[rowIndex][columnIndex]}
-              plotValue={plotValue}
-              onMouseDown={attemptActionOnPlot}
-              onSweepPlot={(e) => actionPlot(e, rowIndex, columnIndex)}
-              onFlagPlot={(e) => actionPlot(e, rowIndex, columnIndex)}
-              isGameWon={isGameWon}
-              isGameOver={isGameOver}
-            />
-          ))}
-        </Row>
-      ))}
+      <div>
+        {minefield.map((row, rowIndex) => (
+          <Row key={rowIndex}>
+            {row.map((plotValue, columnIndex) => (
+              <Plot
+                key={columnIndex}
+                plotState={plotStates[rowIndex][columnIndex]}
+                plotValue={plotValue}
+                onMouseDown={attemptActionOnPlot}
+                onSweepPlot={(e) => actionPlot(e, rowIndex, columnIndex)}
+                onFlagPlot={(e) => actionPlot(e, rowIndex, columnIndex)}
+                isGameWon={isGameWon}
+                isGameOver={isGameOver}
+              />
+            ))}
+          </Row>
+        ))}
+      </div>
     </Minefield>
   );
 };

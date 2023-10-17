@@ -9,7 +9,7 @@ const PageTitle = styled.h1({
 
 const Home = () => (
   <>
-    <PageTitle>Minesweeper</PageTitle>
+    <PageTitle>minesweeper</PageTitle>
     <Minesweeper />
     <Credits />
   </>

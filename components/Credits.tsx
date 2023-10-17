@@ -46,6 +46,12 @@ const itemVariants = {
 
 const Container = styled.div({
   height: 190,
+  ul: {
+    padding: 0,
+    li: {
+      fontSize: 12,
+    },
+  },
 });
 const CreditsButton = styled.div({
   display: 'flex',
@@ -65,7 +71,7 @@ export const Credits = () => {
   return (
     <Container>
       <CreditsButton onClick={toggleAttributions}>
-        Credits
+        credits
         <motion.div animate={{ rotate: isAttributionsShowing ? -135 : 0 }}>
           +
         </motion.div>

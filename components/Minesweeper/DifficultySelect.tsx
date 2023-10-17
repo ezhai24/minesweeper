@@ -5,9 +5,9 @@ import { Difficulty, FieldSize, FieldSizeConfig } from './utils';
 
 type FieldSizeOption = { label: string; value: keyof typeof FieldSize };
 const fieldSizeOptions: FieldSizeOption[] = [
-  { label: 'Beginner', value: Difficulty.BEGINNER },
-  { label: 'Intermediate', value: Difficulty.INTERMEDIATE },
-  { label: 'Expert', value: Difficulty.EXPERT },
+  { label: 'beginner', value: Difficulty.BEGINNER },
+  { label: 'intermediate', value: Difficulty.INTERMEDIATE },
+  { label: 'expert', value: Difficulty.EXPERT },
 ];
 
 const ButtonBar = styled.div({

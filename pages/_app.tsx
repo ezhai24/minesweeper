@@ -21,6 +21,7 @@ export default function App({ Component, pageProps }: AppProps) {
           href="/fonts/7segments.ttf"
           as="font"
           type="font/ttf"
+          crossOrigin=""
         />
       </Head>
       <Component {...pageProps} />

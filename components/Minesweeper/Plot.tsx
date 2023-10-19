@@ -13,9 +13,10 @@ const Colors = {
 const FieldPlot = styled.div(
   ({ isPlotUncovered }: { isPlotUncovered: boolean }) => ({
     position: 'relative',
-    width: 32,
-    height: 32,
+    width: '100%',
+    aspectRatio: '1',
     border: `1px solid ${Colors.BORDER}`,
+    boxSizing: 'border-box',
     backgroundColor: isPlotUncovered ? Colors.DEEP_OCEAN : Colors.SHALLOW_OCEAN,
 
     '::before': {

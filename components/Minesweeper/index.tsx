@@ -14,13 +14,19 @@ import {
   PlotState,
 } from './utils';
 
-const Minefield = styled.div({
-  width: 'fit-content',
-});
-
-const Row = styled.div({
-  display: 'flex',
-});
+const Minefield = styled.div(
+  ({ numRows, numColumns }: { numRows: number; numColumns: number }) => ({
+    display: 'grid',
+    gridTemplateRows: `repeat(${numRows}, 1fr)`,
+    gridTemplateColumns: `repeat(${numColumns}, 1fr)`,
+    width: '100%',
+    maxWidth: 40 * numColumns,
+    '@media (max-width: 768px)': {
+      gridTemplateRows: `repeat(${numColumns}, 1fr)`,
+      gridTemplateColumns: `repeat(${numRows}, 1fr)`,
+    },
+  })
+);
 
 const Minesweeper = () => {
   const {
@@ -164,7 +170,7 @@ const Minesweeper = () => {
     }
 
     const isLeftMouseUp = e.type === 'mouseup' && e.nativeEvent.button === 0;
-    const isRightClick = e.type === 'contextmenu' && e.nativeEvent.button === 2;
+    const isRightClick = e.type === 'contextmenu';
     if (isLeftMouseUp) {
       sweepPlot(e, row, column);
     } else if (isRightClick) {
@@ -192,7 +198,7 @@ const Minesweeper = () => {
   };
 
   return (
-    <Minefield>
+    <>
       <DifficultySelect
         difficulty={difficulty}
         setDifficulty={setDifficulty}
@@ -207,25 +213,23 @@ const Minesweeper = () => {
         fieldSize={fieldSize}
         resetField={resetField}
       />
-      <div>
-        {minefield.map((row, rowIndex) => (
-          <Row key={rowIndex}>
-            {row.map((plotValue, columnIndex) => (
-              <Plot
-                key={columnIndex}
-                plotState={plotStates[rowIndex][columnIndex]}
-                plotValue={plotValue}
-                onMouseDown={attemptActionOnPlot}
-                onSweepPlot={(e) => actionPlot(e, rowIndex, columnIndex)}
-                onFlagPlot={(e) => actionPlot(e, rowIndex, columnIndex)}
-                isGameWon={isGameWon}
-                isGameOver={isGameOver}
-              />
-            ))}
-          </Row>
-        ))}
-      </div>
-    </Minefield>
+      <Minefield numRows={minefield.length} numColumns={minefield[0].length}>
+        {minefield.map((row, rowIndex) =>
+          row.map((plotValue, columnIndex) => (
+            <Plot
+              key={columnIndex}
+              plotState={plotStates[rowIndex][columnIndex]}
+              plotValue={plotValue}
+              onMouseDown={attemptActionOnPlot}
+              onSweepPlot={(e) => actionPlot(e, rowIndex, columnIndex)}
+              onFlagPlot={(e) => actionPlot(e, rowIndex, columnIndex)}
+              isGameWon={isGameWon}
+              isGameOver={isGameOver}
+            />
+          ))
+        )}
+      </Minefield>
+    </>
   );
 };
 

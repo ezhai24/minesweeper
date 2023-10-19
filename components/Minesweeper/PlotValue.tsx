@@ -3,13 +3,41 @@ import Image from 'next/image';
 
 import { PlotNumberColors, PlotState } from './utils';
 
-const Flag = () => <Image src="/flag.svg" alt="Flag" width={18} height={18} />;
-const Mine = () => <Image src="/mine.svg" alt="Mine" width={24} height={24} />;
+const Flag = () => (
+  <Image
+    src="/flag.svg"
+    alt="Flag"
+    width={18}
+    height={18}
+    style={{ width: '100%', maxWidth: 18, aspectRatio: '1' }}
+  />
+);
+const Mine = () => (
+  <Image
+    src="/mine.svg"
+    alt="Mine"
+    width={24}
+    height={24}
+    style={{ width: '100%', maxWidth: 24, aspectRatio: '1' }}
+  />
+);
 const CrossedOutMine = () => (
-  <Image src="/crossed-out-mine.svg" alt="Mine with X" width={24} height={24} />
+  <Image
+    src="/crossed-out-mine.svg"
+    alt="Mine with X"
+    width={24}
+    height={24}
+    style={{ width: '100%', maxWidth: 24, aspectRatio: '1' }}
+  />
 );
 const ExplodedMine = () => (
-  <Image src="/explosion.svg" alt="Explosion" width={32} height={32} />
+  <Image
+    src="/explosion.svg"
+    alt="Explosion"
+    width={32}
+    height={32}
+    style={{ width: '100%', maxWidth: 32, aspectRatio: '1' }}
+  />
 );
 const Number = styled.span(({ color }: { color: string }) => ({
   color: color || 'black',

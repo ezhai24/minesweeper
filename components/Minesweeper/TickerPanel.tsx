@@ -7,9 +7,8 @@ const Panel = styled.div({
   display: 'flex',
   marginTop: 20,
   marginBottom: 10,
-  justifyContent: 'center',
+  justifyContent: 'space-between',
   alignItems: 'flex-end',
-  gap: 70,
   fontFamily: 'Seven Segments',
   fontSize: 24,
 });

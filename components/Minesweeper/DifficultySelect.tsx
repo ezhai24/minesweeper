@@ -63,7 +63,7 @@ const DifficultySelect = (props: Props) => {
                 width: '100%',
                 height: '100%',
                 borderRadius: 20,
-                backgroundColor: 'black', // '#305065',
+                backgroundColor: '#303134',
               }}
               transition={{ type: 'spring', duration: 0.4 }}
             />

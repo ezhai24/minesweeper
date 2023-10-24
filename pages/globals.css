@@ -8,10 +8,26 @@
   font-display: swap;
 }
 
+body {
+  margin: 0;
+}
+
 #__next {
   display: flex;
   flex-direction: column;
+  padding: 50;
   align-items: center;
   background-color: white;
   font-family: sans-serif;
+}
+
+@media (prefers-color-scheme: dark) {
+  #__next {
+    background-color: #202124;
+    color: rgba(244, 244, 244, 0.87);
+  }
+}
+
+a {
+  color: #afbced;
 }

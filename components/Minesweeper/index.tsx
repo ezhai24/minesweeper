@@ -8,9 +8,9 @@ import Plot from './Plot';
 import TickerPanel from './TickerPanel';
 import {
   Difficulty,
-  FieldSize,
   FieldSizeConfig,
   generateMinefield,
+  getFieldSize,
   PlotState,
 } from './utils';
 
@@ -23,10 +23,6 @@ const Minefield = styled.div(
     display: 'grid',
     gridTemplateRows: `repeat(${numRows}, 1fr)`,
     gridTemplateColumns: `repeat(${numColumns}, 1fr)`,
-    '@media (max-width: 768px)': {
-      gridTemplateRows: `repeat(${numColumns}, 1fr)`,
-      gridTemplateColumns: `repeat(${numRows}, 1fr)`,
-    },
   })
 );
 
@@ -41,7 +37,9 @@ const Minesweeper = () => {
 
   const [difficulty, setDifficulty] = useState(Difficulty.BEGINNER);
 
-  const fieldSize = FieldSize[difficulty];
+  const isSmall =
+    typeof window !== 'undefined' ? window.innerWidth < 768 : false;
+  const fieldSize = getFieldSize(difficulty, isSmall);
 
   const [minefield, setMinefield] = useState(
     generateMinefield(

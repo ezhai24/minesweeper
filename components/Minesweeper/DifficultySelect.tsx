@@ -1,9 +1,9 @@
 import styled from '@emotion/styled';
 import { motion } from 'framer-motion';
 
-import { Difficulty, FieldSize, FieldSizeConfig } from './utils';
+import { Difficulty, FieldSizeConfig, getFieldSize } from './utils';
 
-type FieldSizeOption = { label: string; value: keyof typeof FieldSize };
+type FieldSizeOption = { label: string; value: Difficulty };
 const fieldSizeOptions: FieldSizeOption[] = [
   { label: 'beginner', value: Difficulty.BEGINNER },
   { label: 'intermediate', value: Difficulty.INTERMEDIATE },
@@ -43,7 +43,11 @@ const DifficultySelect = (props: Props) => {
 
   const changeFieldSize = (newDifficulty: Difficulty) => {
     setDifficulty(newDifficulty);
-    resetField(FieldSize[newDifficulty]);
+
+    const isSmall =
+      typeof window !== 'undefined' ? window.innerWidth < 768 : false;
+    const newFieldSize = getFieldSize(newDifficulty, isSmall);
+    resetField(newFieldSize);
   };
 
   return (

@@ -33,7 +33,7 @@ export type FieldSizeConfig = {
   numColumns: number;
   numMines: number;
 };
-export const FieldSize = {
+const FieldSize = {
   [Difficulty.BEGINNER]: {
     numRows: 9,
     numColumns: 9,
@@ -49,6 +49,19 @@ export const FieldSize = {
     numColumns: 30,
     numMines: 99,
   },
+};
+export const getFieldSize = (difficulty: Difficulty, isMobile?: boolean) => {
+  // Rotate the board 90deg on small screens
+  if (isMobile) {
+    const { numColumns, numRows, numMines } = FieldSize[difficulty];
+    return {
+      numRows: numColumns,
+      numColumns: numRows,
+      numMines,
+    };
+  }
+
+  return FieldSize[difficulty];
 };
 
 /**

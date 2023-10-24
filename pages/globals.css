@@ -8,8 +8,22 @@
   font-display: swap;
 }
 
-body {
+html,
+body,
+#__next {
+  min-height: 100%;
   margin: 0;
+  background-color: white;
+  font-family: sans-serif;
+}
+
+@media (prefers-color-scheme: dark) {
+  html,
+  body,
+  #__next {
+    background-color: #202124;
+    color: rgba(244, 244, 244, 0.87);
+  }
 }
 
 #__next {
@@ -17,15 +31,6 @@ body {
   flex-direction: column;
   padding: 50;
   align-items: center;
-  background-color: white;
-  font-family: sans-serif;
-}
-
-@media (prefers-color-scheme: dark) {
-  #__next {
-    background-color: #202124;
-    color: rgba(244, 244, 244, 0.87);
-  }
 }
 
 a {

@@ -19,7 +19,7 @@ const Minefield = styled.div(
     display: 'grid',
     gridTemplateRows: `repeat(${numRows}, 1fr)`,
     gridTemplateColumns: `repeat(${numColumns}, 1fr)`,
-    width: '100%',
+    width: '90%',
     maxWidth: 40 * numColumns,
     '@media (max-width: 768px)': {
       gridTemplateRows: `repeat(${numColumns}, 1fr)`,

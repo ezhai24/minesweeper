@@ -42,7 +42,7 @@ const TickerPanel = (props: Props) => {
   } = props;
   return (
     <Panel>
-      <span>{flagsLeft.toString().padStart(3, '0')}</span>
+      <span>{isGameWon ? '00' : flagsLeft.toString().padStart(3, '0')}</span>
       <ResetButton onClick={() => resetField(fieldSize)}>
         <Sailor
           isMouseDown={isMouseDown}
